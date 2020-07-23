@@ -1,35 +1,26 @@
-import pandas as pd
-import numpy as np
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 import talib
-import yfinance as yf
 from talib import MA_Type
+import yfinance as yf
 
-stock = yf.download('QQQ', '2020-1-1','2020-07-07', show_nontrading=True)
-#stock['Date'] = stock.index
-#stock.index = pd.to_datetime(stock.index)
-stock = stock[['Open', 'High', 'Low', 'Close', 'Volume']]
+stock = yf.download('QQQ', '2020-1-1','2020-07-21', show_nontrading=True)
 
-inputs = {
-    'open': stock['Open'],
-    'high': stock['High'],
-    'low': stock['Low'],
-    'close': stock['Close'],
-    'volume': stock['Volume']
-}
+stock = stock[['Open', 'High', 'Low', 'Adj Close', 'Volume']]
 
-close = talib.SMA(stock['Close'])
+stock = stock.iloc[::-1]
+stock = stock.dropna()
+close = stock['Adj Close']
+#close = talib.SMA(stock['Adj Close'].values)
+upper, middle, lower = talib.BBANDS(close, timeperiod=20, nbdevup=2, nbdevdn=2, matype=0)
 
-upper, middle, lower = talib.BBANDS(close, matype=MA_Type.T3)
-
-output = talib.MOM(close, timeperiod=5)
+output = talib.MOM(close, timeperiod=10)
 
 data = go.Candlestick(x=stock.index,
                 open=stock['Open'],
                 high=stock['High'],
                 low=stock['Low'],
-                close=stock['Close'], name='stock OHLC')
+                close=stock['Adj Close'], name='stock OHLC')
 
 # TODO - The BBands are graphing, but they aren't plotting correctly
 # TODO - code pulled from https://chart-studio.plotly.com/~jackp/17421/plotly-candlestick-chart-in-python/#/
