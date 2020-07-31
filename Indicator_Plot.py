@@ -27,7 +27,8 @@ RSI = talib.RSI(close, timeperiod=14)
 macd, macdsignal, macdhist = talib.MACD(close, fastperiod=12, slowperiod=26, signalperiod=9)
 
 # set the plot to make room for 4 charts all in 1 vertical column
-fig = make_subplots(rows=4, cols=1)
+fig = make_subplots(rows=4, cols=1, vertical_spacing=0.10)
+#fig = make_subplots(rows=4, cols=1)
 
 # sets the plot up graph the stock data in a candlestick format
 fig.append_trace(go.Candlestick(x=stock.index,
@@ -37,15 +38,16 @@ fig.append_trace(go.Candlestick(x=stock.index,
                 close=stock['Adj Close'], name='stock OHLC'), row=1, col=1)
 
 # sets the plot up to graph the upper, middle, and lower bbands
-upper_bb = go.Scatter(x=stock.index, y=upper, name='upper')
-middle_bb = go.Scatter(x=stock.index, y=middle, name='middle')
-lower_bb = go.Scatter(x=stock.index, y=lower, name='lower')
+upper_bb = go.Scatter(x=stock.index, y=upper, name='Upper BB')
+middle_bb = go.Scatter(x=stock.index, y=middle, name='Middle BB')
+lower_bb = go.Scatter(x=stock.index, y=lower, name='Lower BB')
 
 # set the plot to graph the 50 day and 200 day simple moving average
 SMA_50 = go.Scatter(x=stock.index, y=SMA_50, name='50 Day Simple Moving Average')
 SMA_200_chart = go.Scatter(x=stock.index, y=SMA_200, name='200 Day Simple Moving Average')
 
 # adds the created plots to the final plot
+fig.add_trace(go.Bar(x=stock.index, y=stock['Volume'], name='Volume'), row=2, col=1)
 fig.add_trace(upper_bb)
 fig.add_trace(middle_bb)
 fig.add_trace(lower_bb)
@@ -56,7 +58,38 @@ fig.add_trace(SMA_200_chart)
 fig.append_trace(go.Scatter(x=stock.index, y=RSI, name='RSI'), row=3, col=1)
 
 # formatting the plot
-fig.update_layout(height=1200, width=1000, title_text="Indicators")
-
+fig.update_layout(
+    xaxis=dict(
+        rangeselector=dict(
+            buttons=list([
+                dict(count=7,
+                     label='1w',
+                     step='day',
+                     stepmode='backward'),
+                dict(count=1,
+                     label="1m",
+                     step="month",
+                     stepmode="backward"),
+                dict(count=6,
+                     label="6m",
+                     step="month",
+                     stepmode="backward"),
+                dict(count=1,
+                     label="YTD",
+                     step="year",
+                     stepmode="todate"),
+                dict(count=1,
+                     label="1y",
+                     step="year",
+                     stepmode="backward"),
+                dict(step="all")
+            ])
+        ),
+        rangeslider=dict(
+            visible=False
+        ),
+        type="date"
+    )
+)
 # display the plot
 fig.show()
