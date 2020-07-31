@@ -26,9 +26,9 @@ RSI = talib.RSI(close, timeperiod=14)
 # calculate the moving average convergence and divergence
 macd, macdsignal, macdhist = talib.MACD(close, fastperiod=12, slowperiod=26, signalperiod=9)
 
-# set the plot to make room for 4 charts all in 1 vertical column
-fig = make_subplots(rows=4, cols=1, vertical_spacing=0.10)
-#fig = make_subplots(rows=4, cols=1)
+# set the plot to make room for all charts all in 1 vertical column, make sure to set
+# vertical_spacing to some number 0-0.10 divided by the number of rows
+fig = make_subplots(rows=6, cols=1, vertical_spacing=0.10/6)
 
 # sets the plot up graph the stock data in a candlestick format
 fig.append_trace(go.Candlestick(x=stock.index,
@@ -57,8 +57,13 @@ fig.add_trace(SMA_200_chart)
 # create a new plot that will show the RSI,
 fig.append_trace(go.Scatter(x=stock.index, y=RSI, name='RSI'), row=3, col=1)
 
+# create a new plot that will display the MACD history as a bar plot, then add the MACD and signal
+fig.append_trace(go.Bar(x=stock.index, y=macdhist, name='MACD History'), row=4, col=1)
+fig.add_trace(go.Scatter(x=stock.index, y=macd, name='MACD'), row=4, col=1)
+fig.add_trace(go.Scatter(x=stock.index, y=macdsignal, name='MACD Signal'), row=4, col=1)
+
 # formatting the plot
-fig.update_layout(
+fig.update_layout(width=1400, height=2750,
     xaxis=dict(
         rangeselector=dict(
             buttons=list([
@@ -89,7 +94,7 @@ fig.update_layout(
             visible=False
         ),
         type="date"
-    )
+        )
 )
 # display the plot
 fig.show()
