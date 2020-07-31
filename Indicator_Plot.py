@@ -28,7 +28,7 @@ macd, macdsignal, macdhist = talib.MACD(close, fastperiod=12, slowperiod=26, sig
 
 # set the plot to make room for all charts all in 1 vertical column, make sure to set
 # vertical_spacing to some number 0-0.10 divided by the number of rows
-fig = make_subplots(rows=6, cols=1, vertical_spacing=0.10/6)
+fig = make_subplots(rows=4, cols=1, vertical_spacing=0.10/6)
 
 # sets the plot up graph the stock data in a candlestick format
 fig.append_trace(go.Candlestick(x=stock.index,
