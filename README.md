@@ -4,6 +4,6 @@ A work in progress on developing new technical analysis to predict future stock 
 
 Here is an example of a graph of QQQ:
 
-<a href= https://htmlpreview.github.io/?https://raw.githubusercontent.com/tkravits/Financials/master/Indicator.html>Access Chart Here</a>
+<a href="https://htmlpreview.github.io/?https://raw.githubusercontent.com/tkravits/Financials/master/Indicator.html">Access Chart Here</a>
 
 The code for this is <a href="https://github.com/tkravits/Financials">here</a>
